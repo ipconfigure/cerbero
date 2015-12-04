@@ -4,9 +4,13 @@ import shutil
 class Recipe(custom.GStreamer):
     name = 'gstreamer-1.0'
     config_sh = 'sh ./autogen.sh --noconfigure && ./configure'
-    configure_options = "--enable-static --program-prefix= --disable-examples "
+    configure_options = "--enable-static --program-prefix= --disable-examples --enable-check "
     remotes = {'origin': 'git://anongit.freedesktop.org/gstreamer/gstreamer'}
     deps = ['glib', 'gtk-doc-lite']
+
+    patches = [
+        'gstreamer-1.0/ipc_gstreamer-bus-race.patch'
+    ]
 
     files_bins = ['gst-inspect-1.0',
                   'gst-typefind-1.0',

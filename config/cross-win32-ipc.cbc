@@ -1,0 +1,16 @@
+import os
+import sys
+from cerbero.config import Platform, Architecture, Distro, DistroVersion
+
+# mingw32 settings
+target_platform=Platform.WINDOWS
+target_arch=Architecture.X86
+target_distro=Distro.WINDOWS
+target_distro_version=DistroVersion.WINDOWS_7
+build = 'x86_64-pc-linux'
+
+# use all cores
+allow_parallel_build = True
+
+# set build related variables
+home_dir=os.path.join(os.getcwd(), 'cerbero_build')
