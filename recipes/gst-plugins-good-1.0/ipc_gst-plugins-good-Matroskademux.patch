@@ -1,0 +1,29 @@
+From cc7859a965a14a01b2e71096a74d13cf35364f9c Mon Sep 17 00:00:00 2001
+From: Jake Foytik <jake.foytik@ipconfigure.com>
+Date: Thu, 19 Nov 2015 09:05:14 -0500
+Subject: [PATCH] Fix issue when trying to seek non-indexed files.
+
+When trying to seek on non-indexed matroska files before the
+stream_start_time variable has been set, the search position
+gets improperly set resulting in a seek to the end of the file.
+---
+ gst/matroska/matroska-demux.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gst/matroska/matroska-demux.c b/gst/matroska/matroska-demux.c
+index 2fb4928..132a9f5 100644
+--- a/gst/matroska/matroska-demux.c
++++ b/gst/matroska/matroska-demux.c
+@@ -1796,7 +1796,8 @@ gst_matroska_demux_search_pos (GstMatroskaDemux * demux, GstClockTime time)
+   GST_OBJECT_UNLOCK (demux);
+ 
+   /* sanitize */
+-  time = MAX (time, demux->stream_start_time);
++  if(demux->stream_start_time != GST_CLOCK_TIME_NONE)
++	  time = MAX (time, demux->stream_start_time);
+ 
+   /* avoid division by zero in first estimation below */
+   if (otime <= demux->stream_start_time)
+-- 
+1.9.1
+
