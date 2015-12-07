@@ -1,0 +1,40 @@
+From 4dbaa2effa41e9ada01fe14b323264ea700b2b9b Mon Sep 17 00:00:00 2001
+From: Evan Callaway <evan.callaway@ipconfigure.com>
+Date: Wed, 2 Dec 2015 09:00:31 -0500
+Subject: [PATCH] Update capitalization of x-sessioncookie
+
+Some servers incorrectly parse header names with strict case-sensitivity.  For compatibility with these systems change X-Sessioncookie to x-sessioncookie.
+---
+ gst-libs/gst/rtsp/gstrtspdefs.c | 2 +-
+ gst-libs/gst/rtsp/gstrtspdefs.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gst-libs/gst/rtsp/gstrtspdefs.c b/gst-libs/gst/rtsp/gstrtspdefs.c
+index 4f9dc9f..a27f579 100644
+--- a/gst-libs/gst/rtsp/gstrtspdefs.c
++++ b/gst-libs/gst/rtsp/gstrtspdefs.c
+@@ -163,7 +163,7 @@ static struct rtsp_header rtsp_headers[] = {
+   {"Host", FALSE},
+   {"Pragma", TRUE},
+   {"X-Server-IP-Address", FALSE},
+-  {"X-Sessioncookie", FALSE},
++  {"x-sessioncookie", FALSE},
+ 
+   {"RTCP-Interval", FALSE},
+ 
+diff --git a/gst-libs/gst/rtsp/gstrtspdefs.h b/gst-libs/gst/rtsp/gstrtspdefs.h
+index 4297a53..2a1608e 100644
+--- a/gst-libs/gst/rtsp/gstrtspdefs.h
++++ b/gst-libs/gst/rtsp/gstrtspdefs.h
+@@ -326,7 +326,7 @@ typedef enum {
+   GST_RTSP_HDR_HOST,                /* Host */
+   GST_RTSP_HDR_PRAGMA,              /* Pragma */
+   GST_RTSP_HDR_X_SERVER_IP_ADDRESS, /* X-Server-IP-Address */
+-  GST_RTSP_HDR_X_SESSIONCOOKIE,     /* X-Sessioncookie */
++  GST_RTSP_HDR_X_SESSIONCOOKIE,     /* x-sessioncookie */
+ 
+   GST_RTSP_HDR_RTCP_INTERVAL,       /* RTCP-Interval */
+ 
+-- 
+1.9.1
+
