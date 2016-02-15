@@ -16,8 +16,7 @@ class Recipe(custom.GStreamer):
     patches = [
             'gst-plugins-base-1.0/ipc_gst-plugins-base-appsink.patch',
             'gst-plugins-base-1.0/ipc_gst-plugins-base-rtspsrc-authentication.patch',
-            'gst-plugins-base-1.0/ipc_gst-plugins-base-http-tunneling-relative-uris.patch',
-            'gst-plugins-base-1.0/ipc_gst-plugins-base-x-sessioncookie.patch'
+            'gst-plugins-base-1.0/ipc_gst-plugins-base-http-tunneling-relative-uris.patch'
     ]
 
     files_libs = ['libgstallocators-1.0',

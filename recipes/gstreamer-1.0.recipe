@@ -9,8 +9,7 @@ class Recipe(custom.GStreamer):
     deps = ['glib', 'gtk-doc-lite']
 
     patches = [
-        'gstreamer-1.0/ipc_gstreamer-bus-race.patch',
-        'gstreamer-1.0/ipc_gstreamer-collectpads-dts.patch'
+        'gstreamer-1.0/ipc_gstreamer-bus-race.patch'
     ]
 
     files_bins = ['gst-inspect-1.0',
