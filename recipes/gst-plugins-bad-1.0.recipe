@@ -31,6 +31,9 @@ class Recipe(recipe.Recipe):
             'faad2', 'libkate', 'zlib', 'openh264', 'opus', 'nettle', 'librtmp',
             'libsrtp', 'schroedinger', 'libdca', 'libmms', 'libdvdnav',
             'soundtouch', 'vo-aacenc', 'librsvg', 'openjpeg', 'graphene', 'spandsp']
+    patches = [
+        'gst-plugins-bad-1.0/ipc_gst-plugins-bad-fix-srtp-rollover.patch'
+    ]
     use_system_libs = True
 
     files_lang = ['gst-plugins-bad-1.0']
