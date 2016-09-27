@@ -1,0 +1,102 @@
+From 9c1432ddce91d06102bc936eeaa5bd034ba138d4 Mon Sep 17 00:00:00 2001
+From: Mike Ruffing <mike.ruffing@ipconfigure.com>
+Date: Mon, 26 Sep 2016 16:20:33 -0400
+Subject: [PATCH 1/1] Added appsink race patch (IPC)
+
+---
+ gst-libs/gst/app/gstappsink.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/gst-libs/gst/app/gstappsink.c b/gst-libs/gst/app/gstappsink.c
+index e5293ee..4cae7f4 100644
+--- a/gst-libs/gst/app/gstappsink.c
++++ b/gst-libs/gst/app/gstappsink.c
+@@ -83,6 +83,7 @@ struct _GstAppSinkPrivate
+ 
+   GCond cond;
+   GMutex mutex;
++  GMutex callback_mutex;
+   GQueue *queue;
+   GstBuffer *preroll;
+   GstCaps *preroll_caps;
+@@ -372,6 +373,7 @@ gst_app_sink_init (GstAppSink * appsink)
+       GstAppSinkPrivate);
+ 
+   g_mutex_init (&priv->mutex);
++  g_mutex_init (&priv->callback_mutex);
+   g_cond_init (&priv->cond);
+   priv->queue = g_queue_new ();
+ 
+@@ -419,6 +421,7 @@ gst_app_sink_finalize (GObject * obj)
+   GstAppSinkPrivate *priv = appsink->priv;
+ 
+   g_mutex_clear (&priv->mutex);
++  g_mutex_clear (&priv->callback_mutex);
+   g_cond_clear (&priv->cond);
+   g_queue_free (priv->queue);
+ 
+@@ -626,11 +629,13 @@ gst_app_sink_event (GstBaseSink * sink, GstEvent * event)
+       g_mutex_unlock (&priv->mutex);
+ 
+       if (emit) {
++        g_mutex_lock(&priv->callback_mutex); 
+         /* emit EOS now */
+         if (priv->callbacks.eos)
+           priv->callbacks.eos (appsink, priv->user_data);
+         else
+           g_signal_emit (appsink, gst_app_sink_signals[SIGNAL_EOS], 0);
++        g_mutex_unlock(&priv->callback_mutex); 
+       }
+ 
+       break;
+@@ -671,6 +676,7 @@ gst_app_sink_preroll (GstBaseSink * psink, GstBuffer * buffer)
+   emit = priv->emit_signals;
+   g_mutex_unlock (&priv->mutex);
+ 
++  g_mutex_lock(&priv->callback_mutex); 
+   if (priv->callbacks.new_preroll) {
+     res = priv->callbacks.new_preroll (appsink, priv->user_data);
+   } else {
+@@ -679,6 +685,7 @@ gst_app_sink_preroll (GstBaseSink * psink, GstBuffer * buffer)
+       g_signal_emit (appsink, gst_app_sink_signals[SIGNAL_NEW_PREROLL], 0,
+           &res);
+   }
++  g_mutex_unlock(&priv->callback_mutex); 
+ 
+   return res;
+ 
+@@ -795,6 +802,7 @@ restart:
+   emit = priv->emit_signals;
+   g_mutex_unlock (&priv->mutex);
+ 
++  g_mutex_lock(&priv->callback_mutex); 
+   if (priv->callbacks.new_sample) {
+     ret = priv->callbacks.new_sample (appsink, priv->user_data);
+   } else {
+@@ -802,6 +810,7 @@ restart:
+     if (emit)
+       g_signal_emit (appsink, gst_app_sink_signals[SIGNAL_NEW_SAMPLE], 0, &ret);
+   }
++  g_mutex_unlock(&priv->callback_mutex); 
+   return ret;
+ 
+ flushing:
+@@ -1349,6 +1358,7 @@ gst_app_sink_set_callbacks (GstAppSink * appsink,
+   priv = appsink->priv;
+ 
+   GST_OBJECT_LOCK (appsink);
++  g_mutex_lock(&priv->callback_mutex); 
+   old_notify = priv->notify;
+ 
+   if (old_notify) {
+@@ -1367,6 +1377,7 @@ gst_app_sink_set_callbacks (GstAppSink * appsink,
+   priv->callbacks = *callbacks;
+   priv->user_data = user_data;
+   priv->notify = notify;
++  g_mutex_unlock(&priv->callback_mutex); 
+   GST_OBJECT_UNLOCK (appsink);
+ }
+ 
+-- 
+2.7.4
+
