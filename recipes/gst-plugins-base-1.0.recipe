@@ -8,6 +8,10 @@ class Recipe(custom.GStreamer):
     remotes = {'origin': 'git://anongit.freedesktop.org/gstreamer/gst-plugins-base'}
     deps = ['glib', 'gstreamer-1.0', 'libxml2', 'libogg', 'pango', 'libtheora',
             'libvisual', 'libvorbis', 'zlib', 'orc', 'opus']
+    patches = [
+        'gst-plugins-base-1.0/ipc_gst-plugins-base-fix-appsink-race.patch'
+    ]
+
     platform_deps = {Platform.ANDROID: [ 'tremor' ], Platform.IOS: [ 'tremor' ] }
     use_system_libs = True
 

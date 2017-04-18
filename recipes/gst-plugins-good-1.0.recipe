@@ -11,7 +11,8 @@ class Recipe(custom.GStreamer):
             'orc', 'wavpack', 'flac', 'taglib', 'bzip2', 'zlib',
             'libvpx', 'libdv', 'cairo']
     patches = [
-        'gst-plugins-good-1.0/ipc_gst-plugins-good-Matroskademux.patch'
+        'gst-plugins-good-1.0/ipc_gst-plugins-good-Matroskademux.patch',
+        'gst-plugins-good-1.0/ipc_gst-plugins-good-rtsp-teardown.patch'
     ]
     files_lang = ['gst-plugins-good-1.0']
 

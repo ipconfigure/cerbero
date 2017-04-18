@@ -6,10 +6,6 @@ class Recipe(custom.GStreamer):
     configure_options = "--disable-examples --enable-static "
     remotes = {'origin': 'git://anongit.freedesktop.org/gstreamer/gst-rtsp-server'}
     deps = ['gstreamer-1.0', 'gst-plugins-base-1.0' ]
-    patches = [
-        'gst-rtsp-server-1.0/ipc_gst-rtsp-server-fix-srtp-rollover.patch',
-        'gst-rtsp-server-1.0/ipc_gst-rtsp-server-fix-shared-media-crash.patch'
-    ]
     files_devel = ['include/gstreamer-1.0/gst/rtsp-server', 'lib/pkgconfig/gstreamer-rtsp-server-1.0.pc']
     files_libs = ['libgstrtspserver-1.0']
     files_typelibs = ['GstRtspServer-1.0']

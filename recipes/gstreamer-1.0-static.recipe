@@ -6,9 +6,6 @@ class Recipe(custom.GStreamerStatic):
     extra_configure_options = '--enable-static'
     remotes = {'origin': 'git://anongit.freedesktop.org/gstreamer/gstreamer'}
     deps = ['glib', 'gtk-doc-lite']
-    patches = [
-        'gstreamer-1.0/ipc_gstreamer-bus-race.patch'
-    ]
     # Static build will always fail on make check
     make_check = None
 
